@@ -1,18 +1,14 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { CatsModule } from './cats/cats.module';
-import { logger } from './common/middleware/logger.middleware';
-import { CatsController } from './cats/cats.controller';
-import { APP_FILTER } from '@nestjs/core';
-import { HttpExceptionFilter } from './common/http-exception.filter';
-import { APP_PIPE } from '@nestjs/core';
-import { ValidationPipe } from './common/validation.pipe';
+import { Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
-  providers: [
-    {
-      provide: APP_PIPE,
-      useClass: ValidationPipe,
-    },
+  imports: [
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      playground: true,
+      autoSchemaFile: 'schema.graphql',
+    }),
   ],
 })
 export class AppModule {}

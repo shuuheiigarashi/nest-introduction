@@ -12,5 +12,5 @@ export class CatsService {
   findAll(): Cat[] {
     return this.cats;
   }
-  constructor(@Optional() @Inject('HTTP_OPTIONS') private httpClient: T) {}
+  constructor(@Optional() @Inject('HTTP_OPTIONS') private httpClient: Cat) {}
 }
