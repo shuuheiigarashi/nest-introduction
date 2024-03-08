@@ -1,0 +1,17 @@
+version: "3"
+
+volumes:
+  db-data:
+
+services:
+  db:
+    image: postgres:14
+    container_name: nest-introduction
+    volumes:
+      - db-data:/var/lib/postgresql/nest-introduction/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
