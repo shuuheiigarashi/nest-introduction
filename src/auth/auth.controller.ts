@@ -10,10 +10,10 @@ export class AuthController {
     return this.authService.signUp(postData);
   }
   @HttpCode(HttpStatus.OK)
-  @Post('/login')
-  async login(
+  @Post('/signin')
+  async signin(
     @Body() postData: { email: string; password: string },
   ): Promise<any> {
-    return await this.authService.login(postData);
+    return await this.authService.signIn(postData);
   }
 }
