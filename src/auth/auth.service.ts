@@ -31,7 +31,7 @@ export class AuthService {
       }
     }
   }
-  async login(postData) {
+  async signIn(postData) {
     const user = await this.prismaService.user.findUnique({
       where: { email: postData.email },
     });
