@@ -2,11 +2,17 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Msg } from './interface/auth.interface';
+import { Jwt, Msg } from './interface/auth.interface';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
+  ) {}
   async signUp(postData): Promise<Msg> {
     const hashed = await bcrypt.hash(postData.password, 12);
     try {
@@ -24,5 +30,30 @@ export class AuthService {
         }
       }
     }
+  }
+  async login(postData) {
+    const user = await this.prismaService.user.findUnique({
+      where: { email: postData.email },
+    });
+    if (!user) throw new ForbiddenException('Email or password incorrect');
+    const isValid = await bcrypt.compare(
+      postData.password,
+      user.hashedPassword,
+    );
+    if (!isValid) throw new ForbiddenException('Email or password incorrect');
+    return this.generateJwt(user.id, user.email);
+  }
+
+  async generateJwt(userId: number, email: string): Promise<Jwt> {
+    const payload = {
+      sub: userId,
+      email,
+    };
+    const secret = this.configService.get('JWT_SECRET');
+    const token = await this.jwtService.signAsync(payload, {
+      expiresIn: '5m',
+      secret: secret,
+    });
+    return { accessToken: token };
   }
 }
