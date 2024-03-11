@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Todo } from './todo.model';
+import { Todo } from './entities/todo.entity';
 import { TodoService } from './todo.service';
 
 @Resolver('Todo')
