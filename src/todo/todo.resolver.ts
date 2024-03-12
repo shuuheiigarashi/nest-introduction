@@ -6,22 +6,22 @@ import { TodoService } from './todo.service';
 export class TodoResolver {
   constructor(private readonly todoService: TodoService) {}
 
-  @Query('todos')
+  @Query((returns) => [Todo])
   async getTodos(): Promise<Todo[]> {
     return this.todoService.getTodos();
   }
 
-  @Query('todo')
+  @Query((returns) => Todo)
   async getTodo(@Args('id') id: number): Promise<Todo> {
     return this.todoService.getTodo(id);
   }
 
-  @Mutation('createTodo')
+  @Mutation((returns) => Todo)
   async createTodo(@Args('title') title: string): Promise<Todo> {
     return this.todoService.createTodo(title);
   }
 
-  @Mutation('updateTodo')
+  @Mutation((returns) => Todo)
   async updateTodo(
     @Args('id') id: number,
     @Args('title') title: string,
@@ -30,7 +30,7 @@ export class TodoResolver {
     return this.todoService.updateTodo(id, { title, completed });
   }
 
-  @Mutation('deleteTodo')
+  @Mutation((returns) => Todo)
   async deleteTodo(@Args('id') id: number): Promise<Todo> {
     return this.todoService.deleteTodo(id);
   }
