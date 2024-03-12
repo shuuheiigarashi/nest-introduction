@@ -2,7 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Todo {
+type Auth {
   id: Int!
   title: String!
   completed: Boolean!
@@ -15,12 +15,22 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Todo {
+  id: Int!
+  title: String!
+  completed: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   getTodos: [Todo!]!
   getTodo(id: Float!): Todo!
 }
 
 type Mutation {
+  signUp: Auth!
+  signIn: Auth!
   createTodo(title: String!): Todo!
   updateTodo(id: Float!, title: String!, completed: Boolean!): Todo!
   deleteTodo(id: Float!): Todo!
